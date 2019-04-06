@@ -4,25 +4,48 @@ import './App.css';
 export default class App extends Component {
 
   state = {
-    allImages: [],
+    api_data: [],
   }
 
   getImages() {
-    fetch("https://api.imgflip.com/get_memes")
+    fetch("https://swapi.co/api/people/1/?format=json")
       .then(res => res.json())
       .then(res => {
         
-        var allImgs = [];
+        
 
-        for(let i = 50; i < 61; i++) 
+       
+
+        /*for(let i = 50; i < 61; i++) 
         {
           allImgs.push(res.data.memes[i]);
-        }
+        }*/
         
-        this.setState({allImages: allImgs});
-
+        this.setState({api_data: res});
+console.log(this.state.api_data);
 
       });
+  }
+  
+  handleAdd() {
+    var name = document.getElementById("name").value;
+    var planet = document.getElementById("planet").value;
+
+    if(name === "")
+    {
+      console.log("name is empty");
+
+      if(planet === "")
+      {
+        console.log("Planet is empty");
+      }
+    }
+    
+    else if(planet === "")
+    {
+      console.log("Planet is empty");
+    }
+
   }
 
   renderFilter() {
@@ -34,21 +57,18 @@ export default class App extends Component {
                 <div className="row">
 
                     <div className="input-field col s6 ">
-                        <input id="people" type="text" className="validate" required></input>
-                        <label htmlFor="name">People</label>
-                        <button id="button" className="btn waves-effect waves-light" type="submit" name="action">ADD
-                        </button>
+                        <input id="name" type="text" className="validate"></input>
+                        <label htmlFor="name">Name</label>
+                        <button onClick={this.handleAdd} id="button" className="btn waves-effect waves-light" type="submit" name="action">ADD</button>
                         
                     </div>
 
                     <div className="input-field col s6 ">
-                        <input id="planets" type="text" className="validate" required></input>
-                        <label htmlFor="name">Planets</label>
-                        <button id="button" className="btn waves-effect waves-light" type="submit" name="action">SEARCH
-                        </button>
+                        <input id="planet" type="text" className="validate"></input>
+                        <label htmlFor="name">Planet</label>
+                        <button id="button" className="btn waves-effect waves-light" type="submit" name="action">SEARCH</button>
                         
                     </div>
-
                     
                 </div>
             </div>
@@ -63,37 +83,147 @@ export default class App extends Component {
 
   renderBooks() {
 
-    return this.state.allImages.map((value, index, items) => {
+    return this.state.api_data.map((value, index, items) => {
 
       return ( 
         
         (items[index + 1]) ? (
-          <div id="book-container" className="center-book">
+          <div id="book-container" key={index} className="center-book">
             
-              <div id="fragment">
-                <img src={items[index].url} alt=""/>
-                <h1>TITLE: {items[index].id}</h1>
-                <div>
-                  <p>WRITER: {items[index].name}</p>
-                  <p>Genres: {items[index].name}</p>
-                </div>
-                <button onClick={this.deleteBook} id="button-delete" className="red btn waves-effect waves-light" type="submit" name="action">X</button>
-              </div>
+            <div id="fragment">
+              <table id="table-container" className="striped">
+                <thead>
+                  <tr>
+                      <th>Person</th>
+                      <th>Planet</th>
+                      
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>Name: {this.state.api_data[0].name}</td>
+                    <td>Name: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Height: {this.state.api_data.height}</td>
+                    <td>Rotation period: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Mass: {}</td>
+                    <td>Orbital period: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Hair color: {}</td>
+                    <td>Diameter: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Skin color: {}</td>
+                    <td>Climate: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Eye color: {}</td>
+                    <td>Gravity: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Birth year: {}</td>
+                    <td>Terrain: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Gender</td>
+                    <td>Surface water</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Homeworld</td>
+                    <td>Population</td>
+                    
+                  </tr>
+                  
+                </tbody>
+
+              </table>
+
+              <button onClick={this.deleteBook} id="button-delete" className="red btn waves-effect waves-light" type="submit" name="action">X</button>
+            </div>
           
 
-            </div>
+          </div>
         
       ) : (items[index + 1] === undefined && index % 2 === 0) ? (
-         <div id="last-book">
+         <div key={index} id="last-book">
           <div className="center-book" key={index}>
             <div id="fragment" key={items[index].id}>
-              <img src={items[index].url} alt=""/>
-              <h1>TITLE: {items[index].id}</h1>
-              <div>
-                <p>WRITER: {items[index].name}</p>
-                <p>Genres: {items[index].name}</p>
-              </div>
+              
+              <table id="table-container" className="striped">
+                <thead>
+                  <tr>
+                      <th>Person</th>
+                      <th>Planet</th>
+                      
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>Name: {}</td>
+                    <td>Name: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Height: {this.state.api_data.height}</td>
+                    <td>Rotation period: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Mass: {}</td>
+                    <td>Orbital period: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Hair color: {}</td>
+                    <td>Diameter: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Skin color: {}</td>
+                    <td>Climate: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Eye color: {}</td>
+                    <td>Gravity: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Birth year: {}</td>
+                    <td>Terrain: {}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Gender</td>
+                    <td>Surface water</td>
+                    
+                  </tr>
+                  <tr>
+                    <td>Homeworld</td>
+                    <td>Population</td>
+                    
+                  </tr>
+                  
+                </tbody>
+
+              </table>
+
               <button onClick={this.deleteBook} id="button-delete" className="red btn waves-effect waves-light" type="submit" name="action">X</button>
+              
             </div>
           </div>
           </div>

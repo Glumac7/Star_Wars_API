@@ -67,6 +67,10 @@ p,h1,h2,h3,h4,h5,h6 {
 #fragment {
     position: relative;
     min-width: 60%;
+
+    -webkit-box-shadow: 0px 10px 14px -12px rgba(0,0,0,1);
+-moz-box-shadow: 0px 10px 14px -12px rgba(0,0,0,1);
+box-shadow: 0px 10px 14px -12px rgba(0,0,0,1);
 }
 
 #fragment div {
@@ -103,7 +107,7 @@ p,h1,h2,h3,h4,h5,h6 {
 }
 
 
-#people, #planets {
+#name, #planet {
     width: 100%;
 }
 
@@ -116,9 +120,9 @@ label {
 }
 
 #button-delete {
-    position: absolute;
-    bottom: 1%;
-    right: 1%;
+    width: 100%;
+    font-weight: 900;
+    font-size: 16px
 }
 
 #book-container {
@@ -132,4 +136,18 @@ label {
 #last-book {
     width: 50%;
     margin: 0 auto;
+}
+
+#table-container th{
+    border-bottom: 1px solid var(--default-color);
+    text-transform: uppercase;
+    text-align: center;
+}
+
+#table-container td:nth-child(1) {
+    border-right: 1px solid rgba(3, 122, 141, .3);
+}
+
+#table-container td {
+    font-weight: 600;
 }
