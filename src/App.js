@@ -8,21 +8,44 @@ export default class App extends Component {
   }
 
   getImages() {
-    fetch("https://swapi.co/api/people/1/?format=json")
+    fetch("https://swapi.co/api/people/3/?format=json")
       .then(res => res.json())
       .then(res => {
+
+        var finale_push = [];
         
         
+        /*
+        * Fetch a certain num of elements (depending on the number that the client has inputed)
+        * Store them in a ceratin propery an push it to the state
+        */
 
        
 
-        /*for(let i = 50; i < 61; i++) 
-        {
-          allImgs.push(res.data.memes[i]);
-        }*/
-        
-        this.setState({api_data: res});
-console.log(this.state.api_data);
+        /*for(let i = 0; i < 1; i++) 
+        {*/
+          var person_and_planet = [];
+
+          person_and_planet.push(res);
+
+          var ress = res.homeworld + "?format=json";
+
+          
+          fetch(ress)
+            .then(res_planet => res_planet.json())
+            .then(res_planet => {
+              person_and_planet.push(res_planet);
+              finale_push.push(person_and_planet);
+            })
+            .then(asd => {
+              this.setState({api_data: finale_push})
+              console.log(this.state.api_data[0][1].name);
+            });
+          
+          /*
+      }*/
+      
+       
 
       });
   }
@@ -102,13 +125,13 @@ console.log(this.state.api_data);
 
                 <tbody>
                   <tr>
-                    <td>Name: {this.state.api_data[0].name}</td>
+                    <td>Name: {this.state}</td>
                     <td>Name: {}</td>
                     
                   </tr>
                   <tr>
-                    <td>Height: {this.state.api_data.height}</td>
-                    <td>Rotation period: {}</td>
+                    <td>Height: {this.state.api_data[0][1].height}</td>
+                    <td>Rotation period: {this.state.api_data[0][1].rotation_period}</td>
                     
                   </tr>
                   <tr>
@@ -173,48 +196,48 @@ console.log(this.state.api_data);
 
                 <tbody>
                   <tr>
-                    <td>Name: {}</td>
-                    <td>Name: {}</td>
+                    <td>Name: <p>{this.state.api_data[index][0].name}</p></td>
+                    <td>Name: <p>{this.state.api_data[index][1].name}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Height: {this.state.api_data.height}</td>
-                    <td>Rotation period: {}</td>
+                    <td>Height: <p>{this.state.api_data[index][0].height}</p></td>
+                    <td>Rotation period: <p>{this.state.api_data[index][1].rotation_period}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Mass: {}</td>
-                    <td>Orbital period: {}</td>
+                    <td>Mass: <p>{this.state.api_data[index][0].mass}</p></td>
+                    <td>Orbital period: <p>{this.state.api_data[index][1].orbital_period}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Hair color: {}</td>
-                    <td>Diameter: {}</td>
+                    <td>Hair color: <p>{this.state.api_data[index][0].hair_color}</p></td>
+                    <td>Diameter: <p>{this.state.api_data[index][1].diameter}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Skin color: {}</td>
-                    <td>Climate: {}</td>
+                    <td>Skin color: <p>{this.state.api_data[index][0].skin_color}</p></td>
+                    <td>Climate: <p>{this.state.api_data[index][1].climate}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Eye color: {}</td>
-                    <td>Gravity: {}</td>
+                    <td>Eye color: <p>{this.state.api_data[index][0].eye_color}</p></td>
+                    <td>Gravity: <p>{this.state.api_data[index][1].gravity}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Birth year: {}</td>
-                    <td>Terrain: {}</td>
+                    <td>Birth year: <p>{this.state.api_data[index][0].birth_year}</p></td>
+                    <td>Terrain: <p>{this.state.api_data[index][1].terrain}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Gender</td>
-                    <td>Surface water</td>
+                    <td>Gender: <p>{this.state.api_data[index][0].gender}</p></td>
+                    <td>Surface water: <p>{this.state.api_data[index][1].surface_water}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Homeworld</td>
-                    <td>Population</td>
+                    <td>Homeworld: <p>{this.state.api_data[index][1].name}</p></td>
+                    <td>Population: <p>{this.state.api_data[index][1].population}</p></td>
                     
                   </tr>
                   

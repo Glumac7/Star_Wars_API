@@ -151,3 +151,8 @@ label {
 #table-container td {
     font-weight: 600;
 }
+
+#table-container td p {
+    display: inline-block;
+    font-weight: 300;
+}
