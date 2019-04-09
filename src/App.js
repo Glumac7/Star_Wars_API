@@ -1,28 +1,32 @@
 import React, { Component } from 'react'
 import './App.css';
 
-export default class App extends Component {
-
+class App extends Component {
+  
   state = {
     api_data: [],
+    searchPerson: "",
+    searchPlanet: ""
   }
 
   async getImages() {
     
     var finale_push = [];
-    for(var i = 1; i < 9; ++i)
-    {
 
-      await fetch("https://swapi.co/api/people/" + i + "?format=json")
-        .then(res_rest => res_rest.json())
-        .then(async (res_rest) => {
+    for(var i = 1; i <= 88; i++)
+    {
+    await fetch("https://swapi.co/api/people/" + i + "/?format=json")
+      .then(res_rest => res_rest.json())
+      .then(async (res_rest) => {
+        if(res_rest.detail !== "Not found")
+        {
           
           var person_and_planet = [];
           person_and_planet.push(res_rest);
 
           var fetch_planet = res_rest.homeworld + "?format=json";
 
-           await fetch(fetch_planet)
+          await fetch(fetch_planet)
             .then(res_planet => res_planet.json())
             .then(res_planet => {
 
@@ -30,35 +34,31 @@ export default class App extends Component {
               finale_push.push(person_and_planet);
 
             })
-            
-            
-        }).then(rss => {
-          this.setState({api_data: finale_push})
-          console.log(this.state)
-        });
-        
+        }
+          
+      }).then(() => {
+        this.setState({api_data: finale_push})
+      });
     }
   }
   
-  handleAdd() {
+  handleSearch = () => {
     var name = document.getElementById("name").value;
     var planet = document.getElementById("planet").value;
 
-    if(name === "")
+    if(name === "" && planet === "")
     {
-      console.log("name is empty");
-
-      if(planet === "")
-      {
-        console.log("Planet is empty");
-      }
+      alert("Name and Planet are empty!");
     }
-    
+
+    else if(name === "")
+    {
+      this.setState({searchPlanet: document.getElementById("planet").value});
+    }
     else if(planet === "")
     {
-      console.log("Planet is empty");
+      this.setState({searchPerson: document.getElementById("name").value});
     }
-
   }
 
   renderFilter() {
@@ -69,21 +69,19 @@ export default class App extends Component {
 
                 <div className="row">
 
-                    <div className="input-field col s6 ">
+                    <div className="input-field col s6">
                         <input id="name" type="text" className="validate"></input>
-                        <label htmlFor="name">Name</label>
-                        <button onClick={this.handleAdd} id="button" className="btn waves-effect waves-light" type="submit" name="action">ADD</button>
-                        
+                        <label htmlFor="name">Person's name</label>
                     </div>
 
-                    <div className="input-field col s6 ">
+                    <div className="input-field col s6">
                         <input id="planet" type="text" className="validate"></input>
-                        <label htmlFor="name">Planet</label>
-                        <button id="button" className="btn waves-effect waves-light" type="submit" name="action">SEARCH</button>
-                        
+                        <label htmlFor="name">Planet's name</label>
                     </div>
                     
                 </div>
+
+                <button onClick={this.handleSearch} id="button" className="btn waves-effect waves-light" type="submit" name="action"><b>SEARCH</b></button>
             </div>
         </div>
         </div>
@@ -96,11 +94,27 @@ export default class App extends Component {
 
   renderCards() {
 
-    return this.state.api_data.map((value, index, items) => {
+    var {searchPerson, searchPlanet} = this.state;
 
+    var filterAll = [];
+
+    var filterName = this.state.api_data.filter((item) => {
+      
+      if(item[0].name.toLowerCase().indexOf(searchPerson.toLowerCase()) !== -1)
+      {
+        console.log(item[0].name + "---" + searchPerson);
+        filterAll.push(item);
+        
+       
+      }
+        
+    })
+    console.log(filterAll);
+    
+    return filterAll.map((item, index) => {
+console.log("ASDASDAS " + index);
       return ( 
         
-        (items[index + 1]) ? (
           <div id="book-container" key={index} className="center-book">
             
             <div id="fragment">
@@ -115,48 +129,48 @@ export default class App extends Component {
 
                 <tbody>
                   <tr>
-                    <td>Name: <p>{this.state.api_data[index][0].name}</p></td>
-                    <td>Name: <p>{this.state.api_data[index][1].name}</p></td>
+                    <td>Name: <p>{item[0].name}</p></td>
+                    <td>Name: <p>{item[1].name}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Height: <p>{this.state.api_data[index][0].height}</p></td>
-                    <td>Rotation period: <p>{this.state.api_data[index][1].rotation_period}</p></td>
+                    <td>Height: <p>{item[0].height}</p></td>
+                    <td>Rotation period: <p>{item[1].rotation_period}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Mass: <p>{this.state.api_data[index][0].mass}</p></td>
-                    <td>Orbital period: <p>{this.state.api_data[index][1].orbital_period}</p></td>
+                    <td>Mass: <p>{item[0].mass}</p></td>
+                    <td>Orbital period: <p>{item[1].orbital_period}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Hair color: <p>{this.state.api_data[index][0].hair_color}</p></td>
-                    <td>Diameter: <p>{this.state.api_data[index][1].diameter}</p></td>
+                    <td>Hair color: <p>{item[0].hair_color}</p></td>
+                    <td>Diameter: <p>{item[1].diameter}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Skin color: <p>{this.state.api_data[index][0].skin_color}</p></td>
-                    <td>Climate: <p>{this.state.api_data[index][1].climate}</p></td>
+                    <td>Skin color: <p>{item[0].skin_color}</p></td>
+                    <td>Climate: <p>{item[1].climate}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Eye color: <p>{this.state.api_data[index][0].eye_color}</p></td>
-                    <td>Gravity: <p>{this.state.api_data[index][1].gravity}</p></td>
+                    <td>Eye color: <p>{item[0].eye_color}</p></td>
+                    <td>Gravity: <p>{item[1].gravity}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Birth year: <p>{this.state.api_data[index][0].birth_year}</p></td>
-                    <td>Terrain: <p>{this.state.api_data[index][1].terrain}</p></td>
+                    <td>Birth year: <p>{item[0].birth_year}</p></td>
+                    <td>Terrain: <p>{item[1].terrain}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Gender: <p>{this.state.api_data[index][0].gender}</p></td>
-                    <td>Surface water: <p>{this.state.api_data[index][1].surface_water}</p></td>
+                    <td>Gender: <p>{item[0].gender}</p></td>
+                    <td>Surface water: <p>{item[1].surface_water}</p></td>
                     
                   </tr>
                   <tr>
-                    <td>Homeworld: <p>{this.state.api_data[index][1].name}</p></td>
-                    <td>Population: <p>{this.state.api_data[index][1].population}</p></td>
+                    <td>Homeworld: <p>{item[1].name}</p></td>
+                    <td>Population: <p>{item[1].population}</p></td>
                     
                   </tr>
                   
@@ -170,78 +184,6 @@ export default class App extends Component {
 
           </div>
         
-      ) : (items[index + 1] === undefined && index % 2 === 0) ? (
-         <div key={index} id="last-book">
-          <div className="center-book" key={index}>
-            <div id="fragment" key={items[index].id}>
-              
-              <table id="table-container" className="striped">
-                <thead>
-                  <tr>
-                      <th>Person</th>
-                      <th>Planet</th>
-                      
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <tr>
-                    <td>Name: <p>{this.state.api_data[index][0].name}</p></td>
-                    <td>Name: <p>{this.state.api_data[index][1].name}</p></td>
-                    
-                  </tr>
-                  <tr>
-                    <td>Height: <p>{this.state.api_data[index][0].height}</p></td>
-                    <td>Rotation period: <p>{this.state.api_data[index][1].rotation_period}</p></td>
-                    
-                  </tr>
-                  <tr>
-                    <td>Mass: <p>{this.state.api_data[index][0].mass}</p></td>
-                    <td>Orbital period: <p>{this.state.api_data[index][1].orbital_period}</p></td>
-                    
-                  </tr>
-                  <tr>
-                    <td>Hair color: <p>{this.state.api_data[index][0].hair_color}</p></td>
-                    <td>Diameter: <p>{this.state.api_data[index][1].diameter}</p></td>
-                    
-                  </tr>
-                  <tr>
-                    <td>Skin color: <p>{this.state.api_data[index][0].skin_color}</p></td>
-                    <td>Climate: <p>{this.state.api_data[index][1].climate}</p></td>
-                    
-                  </tr>
-                  <tr>
-                    <td>Eye color: <p>{this.state.api_data[index][0].eye_color}</p></td>
-                    <td>Gravity: <p>{this.state.api_data[index][1].gravity}</p></td>
-                    
-                  </tr>
-                  <tr>
-                    <td>Birth year: <p>{this.state.api_data[index][0].birth_year}</p></td>
-                    <td>Terrain: <p>{this.state.api_data[index][1].terrain}</p></td>
-                    
-                  </tr>
-                  <tr>
-                    <td>Gender: <p>{this.state.api_data[index][0].gender}</p></td>
-                    <td>Surface water: <p>{this.state.api_data[index][1].surface_water}</p></td>
-                    
-                  </tr>
-                  <tr>
-                    <td>Homeworld: <p>{this.state.api_data[index][1].name}</p></td>
-                    <td>Population: <p>{this.state.api_data[index][1].population}</p></td>
-                    
-                  </tr>
-                  
-                </tbody>
-
-              </table>
-
-              <button onClick={this.deleteBook} id="button-delete" className="red btn waves-effect waves-light" type="submit" name="action">X</button>
-              
-            </div>
-          </div>
-          </div>
-      ) : null
-      
       )
       
     });
@@ -265,3 +207,5 @@ export default class App extends Component {
     )
   }
 }
+
+export default App;
