@@ -48,16 +48,22 @@ class App extends Component {
 
     if(name === "" && planet === "")
     {
-      alert("Name and Planet are empty!");
+      this.setState({searchPlanet: ""});
+      this.setState({searchPerson: ""});
     }
 
     else if(name === "")
     {
-      this.setState({searchPlanet: document.getElementById("planet").value});
+      this.setState({searchPlanet: planet});
     }
     else if(planet === "")
     {
-      this.setState({searchPerson: document.getElementById("name").value});
+      this.setState({searchPerson: name});
+    }
+    else
+    {
+      this.setState({searchPlanet: planet});
+      this.setState({searchPerson: name});
     }
   }
 
@@ -70,18 +76,16 @@ class App extends Component {
                 <div className="row">
 
                     <div className="input-field col s6">
-                        <input id="name" type="text" className="validate"></input>
+                        <input onChange={this.handleSearch} id="name" type="text" className="validate"></input>
                         <label htmlFor="name">Person's name</label>
                     </div>
 
                     <div className="input-field col s6">
-                        <input id="planet" type="text" className="validate"></input>
+                        <input onChange={this.handleSearch} id="planet" type="text" className="validate"></input>
                         <label htmlFor="name">Planet's name</label>
                     </div>
                     
                 </div>
-
-                <button onClick={this.handleSearch} id="button" className="btn waves-effect waves-light" type="submit" name="action"><b>SEARCH</b></button>
             </div>
         </div>
         </div>
@@ -93,26 +97,46 @@ class App extends Component {
   }
 
   renderCards() {
-
     var {searchPerson, searchPlanet} = this.state;
 
     var filterAll = [];
 
-    var filterName = this.state.api_data.filter((item) => {
+    this.state.api_data.filter((item) => {
+
+      var person_true = item[0].name.toLowerCase().indexOf(searchPerson.toLowerCase()) !== -1;
+      var planet_true = item[1].name.toLowerCase().indexOf(searchPlanet.toLowerCase()) !== -1;
       
-      if(item[0].name.toLowerCase().indexOf(searchPerson.toLowerCase()) !== -1)
+
+      if(this.state.searchPerson === "" && this.state.searchPlanet === "")
       {
-        console.log(item[0].name + "---" + searchPerson);
         filterAll.push(item);
-        
-       
       }
-        
+
+      else if(this.state.searchPlanet === "")
+      {
+        if(person_true)
+        {
+          filterAll.push(item);
+        }
+      }
+
+      else if(this.state.searchPerson === "")
+      {
+        if(planet_true)
+        {
+          filterAll.push(item);
+        }
+      }
+     
+      else if(planet_true && person_true)
+      {
+        filterAll.push(item);
+      }
+      
+      return 0;
     })
-    console.log(filterAll);
     
     return filterAll.map((item, index) => {
-console.log("ASDASDAS " + index);
       return ( 
         
           <div id="book-container" key={index} className="center-book">
@@ -196,11 +220,11 @@ console.log("ASDASDAS " + index);
 
   render() {
     return (
-      <div id="Have-component">
-        <div className="container text-center" id="books-container">
+      <div id="Card-component">
+        <div className="container text-center" id="cards-container">
             
             <div className="row" id="filter">{this.renderFilter()}</div>
-            <div id="books">{this.renderCards()}</div>
+            <div id="cards">{this.renderCards()}</div>
 
         </div>
       </div>
