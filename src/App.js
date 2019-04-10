@@ -43,28 +43,13 @@ class App extends Component {
   }
   
   handleSearch = () => {
+
     var name = document.getElementById("name").value;
     var planet = document.getElementById("planet").value;
 
-    if(name === "" && planet === "")
-    {
-      this.setState({searchPlanet: ""});
-      this.setState({searchPerson: ""});
-    }
-
-    else if(name === "")
-    {
-      this.setState({searchPlanet: planet});
-    }
-    else if(planet === "")
-    {
-      this.setState({searchPerson: name});
-    }
-    else
-    {
-      this.setState({searchPlanet: planet});
-      this.setState({searchPerson: name});
-    }
+    this.setState({searchPlanet: planet});
+    this.setState({searchPerson: name});
+    
   }
 
   renderFilter() {
